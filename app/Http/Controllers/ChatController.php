@@ -11,6 +11,7 @@ use App\Models\Setting;
 use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ChatController extends Controller
 {
@@ -22,16 +23,17 @@ class ChatController extends Controller
         ]);
 
         $sessionToken = $request->input('session_token');
+        $session = $sessionToken
+            ? ChatSession::where('session_token', $sessionToken)->first()
+            : null;
 
-        if (!$sessionToken) {
+        if (!$session) {
             $sessionToken = bin2hex(random_bytes(16));
-            ChatSession::create([
+            $session = ChatSession::create([
                 'session_token' => $sessionToken,
                 'ip_address' => $request->ip(),
             ]);
         }
-
-        $session = ChatSession::where('session_token', $sessionToken)->first();
 
         $skills = Skill::all(['name', 'category', 'level']);
         $projects = Project::all(['title', 'description_id', 'technologies', 'project_url', 'github_url']);
@@ -108,15 +110,22 @@ class ChatController extends Controller
             'message' => $request->input('message'),
         ]);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
+        $response = Http::withoutVerifying()->withHeaders([
+            'Authorization' => 'Bearer ' . config('services.openrouter.key'),
             'Content-Type' => 'application/json',
+            'HTTP-Referer' => 'http://localhost:8000',
+            'X-Title' => 'AI Portfolio',
         ])->post('https://openrouter.ai/api/v1/chat/completions', [
-            'model' => 'meta-llama/llama-3-8b-instruct:free',
+            'model' => 'google/gemini-2.5-flash:free',
             'messages' => $messages,
         ]);
 
-        $aiMessage = $response->json('choices.0.message.content', 'Sorry, I could not get a response.');
+        if ($response->failed()) {
+            Log::error('OpenRouter Error: ' . $response->body());
+            $aiMessage = 'Sorry, I could not get a response. Please try again.';
+        } else {
+            $aiMessage = $response->json('choices.0.message.content', 'Sorry, I could not get a response.');
+        }
 
         ChatMessage::create([
             'chat_session_id' => $session->id,
