@@ -7,7 +7,7 @@ export default function Index({ skills }) {
 
     const handleDelete = (id) => {
         if (confirm('Are you sure you want to delete this skill?')) {
-            destroy(route('admin.skills.destroy', id));
+            destroy('/admin/skills/' + id);
         }
     };
 
@@ -19,7 +19,7 @@ export default function Index({ skills }) {
                         Skills
                     </h1>
                     <Link
-                        href={route('admin.skills.create')}
+                        href="/admin/skills/create"
                         className="rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-black transition-all hover:bg-neutral-200"
                     >
                         Add New
@@ -44,7 +44,7 @@ export default function Index({ skills }) {
                                     <td className="px-6 py-4 text-sm text-neutral-400">{skill.level || '-'}</td>
                                     <td className="px-6 py-4 text-right space-x-2">
                                         <Link
-                                            href={route('admin.skills.edit', skill.id)}
+                                            href={"/admin/skills/" + skill.id + "/edit"}
                                             className="text-xs font-medium text-white hover:underline"
                                         >
                                             Edit

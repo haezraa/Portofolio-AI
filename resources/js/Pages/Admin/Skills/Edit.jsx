@@ -12,7 +12,7 @@ export default function Edit({ skill }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route('admin.skills.update', skill.id));
+        put('/admin/skills/' + skill.id);
     };
 
     return (
@@ -102,7 +102,7 @@ export default function Edit({ skill }) {
                             {processing ? 'Updating...' : 'Update'}
                         </button>
                         <a
-                            href={route('admin.skills.index')}
+                            href="/admin/skills"
                             className="rounded-full border border-neutral-800 px-6 py-2 text-sm font-semibold text-neutral-400 transition-all hover:border-neutral-700"
                         >
                             Cancel
