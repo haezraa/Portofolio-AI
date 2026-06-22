@@ -6,7 +6,7 @@ export default function ProjectsCreate() {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         thumbnail: null,
-        description_id: '',
+        description: '', // Sudah diubah ke description
         description_en: '',
         technologies: '',
         project_url: '',
@@ -75,17 +75,18 @@ export default function ProjectsCreate() {
                     </div>
 
                     <div>
-                        <label htmlFor="description_id" className="block text-xs text-neutral-400 mb-2">
+                        <label htmlFor="description" className="block text-xs text-neutral-400 mb-2">
                             Description (Indonesian)
                         </label>
                         <textarea
-                            id="description_id"
-                            value={data.description_id}
-                            onChange={(e) => setData('description_id', e.target.value)}
+                            id="description"
+                            value={data.description}
+                            onChange={(e) => setData('description', e.target.value)}
                             rows="3"
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="Deskripsi proyek..."
                         />
+                        {errors.description && <p className="mt-1 text-xs text-red-400">{errors.description}</p>}
                     </div>
 
                     <div>
@@ -100,6 +101,7 @@ export default function ProjectsCreate() {
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="Project description..."
                         />
+                        {errors.description_en && <p className="mt-1 text-xs text-red-400">{errors.description_en}</p>}
                     </div>
 
                     <div>
@@ -114,6 +116,7 @@ export default function ProjectsCreate() {
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="https://project.example.com"
                         />
+                        {errors.project_url && <p className="mt-1 text-xs text-red-400">{errors.project_url}</p>}
                     </div>
 
                     <div>
@@ -128,6 +131,7 @@ export default function ProjectsCreate() {
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="https://github.com/user/project"
                         />
+                        {errors.github_url && <p className="mt-1 text-xs text-red-400">{errors.github_url}</p>}
                     </div>
 
                     <div className="flex gap-3 pt-2">

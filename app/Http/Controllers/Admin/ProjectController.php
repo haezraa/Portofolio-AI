@@ -26,22 +26,28 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
+        // Antisipasi jika frontend mengirimkan 'description' alih-alih 'description_id'
+        if (!$request->has('description_id') && $request->has('description')) {
+            $request->merge(['description_id' => $request->description]);
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'description_id' => 'required|string',
             'description_en' => 'nullable|string',
-            'technologies' => 'required|array',
+            'technologies' => 'required|string', // FIX: Terima sebagai string terlebih dahulu
             'project_url' => 'nullable|string|max:255',
             'github_url' => 'nullable|string|max:255',
         ]);
 
-        if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        // FIX: Ubah string koma ("Laravel, React") menjadi array JSON ["Laravel", "React"]
+        if (isset($validated['technologies']) && is_string($validated['technologies'])) {
+            $validated['technologies'] = array_values(array_filter(array_map('trim', explode(',', $validated['technologies']))));
         }
 
-        if (!isset($validated['technologies'])) {
-            $validated['technologies'] = [];
+        if ($request->hasFile('thumbnail')) {
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
         }
 
         Project::create($validated);
@@ -58,25 +64,31 @@ class ProjectController extends Controller
 
     public function update(Request $request, Project $project)
     {
+        // Antisipasi jika frontend mengirimkan 'description' alih-alih 'description_id'
+        if (!$request->has('description_id') && $request->has('description')) {
+            $request->merge(['description_id' => $request->description]);
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'description_id' => 'required|string',
             'description_en' => 'nullable|string',
-            'technologies' => 'required|array',
+            'technologies' => 'required|string', // FIX: Terima sebagai string
             'project_url' => 'nullable|string|max:255',
             'github_url' => 'nullable|string|max:255',
         ]);
+
+        // FIX: Ubah string koma ("Laravel, React") menjadi array JSON ["Laravel", "React"]
+        if (isset($validated['technologies']) && is_string($validated['technologies'])) {
+            $validated['technologies'] = array_values(array_filter(array_map('trim', explode(',', $validated['technologies']))));
+        }
 
         if ($request->hasFile('thumbnail')) {
             if ($project->thumbnail) {
                 Storage::disk('public')->delete($project->thumbnail);
             }
             $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
-        }
-
-        if (!isset($validated['technologies'])) {
-            $validated['technologies'] = [];
         }
 
         $project->update($validated);
