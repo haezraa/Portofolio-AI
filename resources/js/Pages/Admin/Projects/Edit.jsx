@@ -3,19 +3,30 @@ import AdminLayout from '@/Components/AdminLayout';
 import { useForm } from '@inertiajs/react';
 
 export default function ProjectsEdit({ project }) {
-    const { data, setData, post, processing, errors } = useForm({
+    // Tambahkan 'transform' dari useForm
+    const { data, setData, post, processing, errors, transform } = useForm({
         _method: 'PUT',
         title: project.title || '',
         thumbnail: null,
-        description_id: project.description_id || '',
+        description: project.description || project.description_id || '', // Konsisten dengan backend
         description_en: project.description_en || '',
-        technologies: Array.isArray(project.technologies) ? project.technologies.join(', ') : '',
+        technologies: Array.isArray(project.technologies) ? project.technologies.join(', ') : (project.technologies || ''),
         project_url: project.project_url || '',
         github_url: project.github_url || '',
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Mencegah pengiriman data thumbnail = null ke backend jika tidak ada gambar baru yang dipilih
+        transform((currentData) => {
+            const submitData = { ...currentData };
+            if (!submitData.thumbnail) {
+                delete submitData.thumbnail; // Hapus dari payload agar DB tidak ketimpa NULL
+            }
+            return submitData;
+        });
+
         post(`/admin/projects/${project.id}`, {
             forceFormData: true,
         });
@@ -83,17 +94,18 @@ export default function ProjectsEdit({ project }) {
                     </div>
 
                     <div>
-                        <label htmlFor="description_id" className="block text-xs text-neutral-400 mb-2">
+                        <label htmlFor="description" className="block text-xs text-neutral-400 mb-2">
                             Description (Indonesian)
                         </label>
                         <textarea
-                            id="description_id"
-                            value={data.description_id}
-                            onChange={(e) => setData('description_id', e.target.value)}
+                            id="description"
+                            value={data.description}
+                            onChange={(e) => setData('description', e.target.value)}
                             rows="3"
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="Deskripsi proyek..."
                         />
+                        {errors.description && <p className="mt-1 text-xs text-red-400">{errors.description}</p>}
                     </div>
 
                     <div>
@@ -108,6 +120,7 @@ export default function ProjectsEdit({ project }) {
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="Project description..."
                         />
+                        {errors.description_en && <p className="mt-1 text-xs text-red-400">{errors.description_en}</p>}
                     </div>
 
                     <div>
@@ -122,6 +135,7 @@ export default function ProjectsEdit({ project }) {
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="https://project.example.com"
                         />
+                        {errors.project_url && <p className="mt-1 text-xs text-red-400">{errors.project_url}</p>}
                     </div>
 
                     <div>
@@ -136,6 +150,7 @@ export default function ProjectsEdit({ project }) {
                             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2.5 text-sm text-neutral-200 focus:border-white focus:outline-none"
                             placeholder="https://github.com/user/project"
                         />
+                        {errors.github_url && <p className="mt-1 text-xs text-red-400">{errors.github_url}</p>}
                     </div>
 
                     <div className="flex gap-3 pt-2">

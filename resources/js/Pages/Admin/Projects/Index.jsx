@@ -37,41 +37,45 @@ export default function ProjectsIndex({ projects }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-neutral-800">
-                            {projects.map((project) => (
-                                <tr key={project.id} className="hover:bg-neutral-900/30 transition-colors">
-                                    <td className="px-6 py-4">
-                                        {project.thumbnail ? (
-                                            <img src={`/storage/${project.thumbnail}`} alt={project.title} className="h-12 w-12 rounded object-cover" />
-                                        ) : (
-                                            <div className="h-12 w-12 rounded bg-neutral-800 flex items-center justify-center text-xs text-neutral-500">
-                                                No Image
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-neutral-200">{project.title}</td>
-                                    <td className="px-6 py-4 text-sm text-neutral-400">
-                                        {Array.isArray(project.technologies) ? project.technologies.join(', ') : '-'}
-                                    </td>
-                                    <td className="px-6 py-4 text-right space-x-2">
-                                        <Link
-                                            href={`/admin/projects/${project.id}/edit`}
-                                            className="text-xs font-medium text-white hover:underline"
-                                        >
-                                            Edit
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(project.id)}
-                                            className="text-xs font-medium text-red-400 hover:underline"
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            {(!projects || projects.length === 0) && (
+                            {projects && projects.length > 0 ? (
+                                projects.map((project) => (
+                                    <tr key={project.id} className="hover:bg-neutral-900/30 transition-colors">
+                                        <td className="px-6 py-4">
+                                            {project.thumbnail ? (
+                                                <img src={`/storage/${project.thumbnail}`} alt={project.title} className="h-12 w-12 rounded object-cover border border-neutral-800" />
+                                            ) : (
+                                                <div className="h-12 w-12 rounded bg-neutral-800 flex items-center justify-center text-xs text-neutral-500">
+                                                    No Image
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm font-medium text-neutral-200">{project.title}</td>
+                                        <td className="px-6 py-4 text-sm text-neutral-400">
+                                            {/* Safeguard: Cek apakah array, string, atau kosong */}
+                                            {Array.isArray(project.technologies) 
+                                                ? project.technologies.join(', ') 
+                                                : (typeof project.technologies === 'string' ? project.technologies : '-')}
+                                        </td>
+                                        <td className="px-6 py-4 text-right space-x-4">
+                                            <Link
+                                                href={`/admin/projects/${project.id}/edit`}
+                                                className="text-xs font-medium text-white hover:underline"
+                                            >
+                                                Edit
+                                            </Link>
+                                            <button
+                                                onClick={() => handleDelete(project.id)}
+                                                className="text-xs font-medium text-red-400 hover:underline"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
                                 <tr>
                                     <td colSpan="4" className="px-6 py-8 text-center text-sm text-neutral-600">
-                                        No projects found.
+                                        No projects found. Try adding a new one!
                                     </td>
                                 </tr>
                             )}
