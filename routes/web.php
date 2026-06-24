@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\EducationController;
 use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\SettingController;
 
 Route::get('/', [PortfolioController::class, 'index']);
 Route::post('/api/chat', [ChatController::class, 'sendMessage']);
@@ -23,5 +24,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('educations', EducationController::class);
     Route::resource('experiences', ExperienceController::class);
     Route::resource('projects', ProjectController::class);
-    // Route::resource('settings', SettingController::class);
+    Route::get('/settings', [SettingController::class, 'index']);
+    Route::post('/settings', [SettingController::class, 'store']);
 });
