@@ -395,7 +395,7 @@ export default function Home({
                     <div className="mt-16 grid gap-4 md:grid-cols-2">
                         {/* Email */}
                         <a
-                            href={`mailto:${settings.contact_email}`}
+                            href={`mailto:${settings.contact_email || 'akbarhezra@example.com'}`}
                             className={`group flex items-center gap-4 rounded-2xl border ${border} ${bgCard} p-6 transition-all duration-300 hover:border-neutral-400`}
                         >
                             <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${isDark ? 'bg-neutral-800' : 'bg-neutral-100'} border ${border}`}>
@@ -403,14 +403,16 @@ export default function Home({
                             </div>
                             <div className="flex-1">
                                 <p className={`text-sm font-medium ${t('text-neutral-500', 'text-neutral-400')}`}>Email</p>
-                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>{settings.contact_email || 'akbarhezra@example.com'}</p>
+                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>
+                                    {settings.contact_email || 'akbarhezra@example.com'}
+                                </p>
                             </div>
                             <span className={`text-lg transition-colors ${t('text-neutral-900 group-hover:text-neutral-600', 'text-neutral-300 group-hover:text-white')}`}>↗</span>
                         </a>
 
                         {/* WhatsApp */}
                         <a
-                            href="https://wa.me/6281234567890"
+                            href={settings.whatsapp || "https://wa.me/6281234567890"}
                             target="_blank"
                             rel="noreferrer"
                             className={`group flex items-center gap-4 rounded-2xl border ${border} ${bgCard} p-6 transition-all duration-300 hover:border-neutral-400`}
@@ -420,14 +422,16 @@ export default function Home({
                             </div>
                             <div className="flex-1">
                                 <p className={`text-sm font-medium ${t('text-neutral-500', 'text-neutral-400')}`}>WhatsApp</p>
-                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>+62 812-3456-7890</p>
+                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>
+                                    {settings.whatsapp || '+62 812-3456-7890'}
+                                </p>
                             </div>
                             <span className={`text-lg transition-colors ${t('text-neutral-900 group-hover:text-neutral-600', 'text-neutral-300 group-hover:text-white')}`}>↗</span>
                         </a>
 
                         {/* LinkedIn */}
                         <a
-                            href="https://linkedin.com/in/akbarhezra"
+                            href={settings.linkedin || "https://linkedin.com/in/akbarhezra"}
                             target="_blank"
                             rel="noreferrer"
                             className={`group flex items-center gap-4 rounded-2xl border ${border} ${bgCard} p-6 transition-all duration-300 hover:border-neutral-400`}
@@ -439,14 +443,16 @@ export default function Home({
                             </div>
                             <div className="flex-1">
                                 <p className={`text-sm font-medium ${t('text-neutral-500', 'text-neutral-400')}`}>LinkedIn</p>
-                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>in/akbarhezra</p>
+                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>
+                                    {settings.linkedin ? settings.linkedin.replace('https://linkedin.com/in/', '') : 'in/akbarhezra'}
+                                </p>
                             </div>
                             <span className={`text-lg transition-colors ${t('text-neutral-900 group-hover:text-neutral-600', 'text-neutral-300 group-hover:text-white')}`}>↗</span>
                         </a>
 
                         {/* GitHub */}
                         <a
-                            href="https://github.com/akbarhezra"
+                            href={settings.github || "https://github.com/akbarhezra"}
                             target="_blank"
                             rel="noreferrer"
                             className={`group flex items-center gap-4 rounded-2xl border ${border} ${bgCard} p-6 transition-all duration-300 hover:border-neutral-400`}
@@ -458,7 +464,9 @@ export default function Home({
                             </div>
                             <div className="flex-1">
                                 <p className={`text-sm font-medium ${t('text-neutral-500', 'text-neutral-400')}`}>GitHub</p>
-                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>@akbarhezra</p>
+                                <p className={`mt-0.5 text-sm font-semibold ${t('text-neutral-900', 'text-white')}`}>
+                                    {settings.github ? settings.github.replace('https://github.com/', '@') : '@akbarhezra'}
+                                </p>
                             </div>
                             <span className={`text-lg transition-colors ${t('text-neutral-900 group-hover:text-neutral-600', 'text-neutral-300 group-hover:text-white')}`}>↗</span>
                         </a>
