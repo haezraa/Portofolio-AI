@@ -5,7 +5,7 @@ export default function Dashboard({ stats }) {
     const statCards = [
         { label: 'Total Skills', value: stats?.total_skills ?? 0, key: 'total_skills' },
         { label: 'Total Projects', value: stats?.total_projects ?? 0, key: 'total_projects' },
-        { label: 'Total Educations', value: stats?.total_educations ?? 0, key: 'total_educations' },
+        { label: 'Total Education', value: stats?.total_educations ?? 0, key: 'total_educations' },
         { label: 'Total Experiences', value: stats?.total_experiences ?? 0, key: 'total_experiences' },
     ];
 

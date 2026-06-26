@@ -7,7 +7,6 @@ export default function AdminLayout({ children }) {
     const navItems = [
         { href: '/admin/dashboard', label: 'Dashboard' },
         { href: '/admin/skills', label: 'Skills' },
-        { href: '/admin/educations', label: 'Education' },
         { href: '/admin/experiences', label: 'Experience' },
         { href: '/admin/projects', label: 'Projects' },
         { href: '/admin/settings', label: 'Settings' },

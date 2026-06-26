@@ -18,7 +18,6 @@ import {
 
 export default function Home({
     skills,
-    educations,
     experiences,
     projects,
     settings = {},
@@ -132,7 +131,7 @@ export default function Home({
                         Skills
                     </a>
                     <a href="#experience" className={`px-4 py-2 rounded-full text-sm ${t('text-neutral-500', 'text-neutral-400')} transition-colors`}>
-                        Experience
+                        Timeline
                     </a>
                     <a href="#projects" className={`px-4 py-2 rounded-full text-sm ${t('text-neutral-500', 'text-neutral-400')} transition-colors`}>
                         Projects
@@ -254,57 +253,55 @@ export default function Home({
                 </div>
             </section>
 
-            {/* Experience */}
-            <section id="experience" className={`border-t ${borderLight} ${isDark ? 'bg-[#0a0a0a]' : 'bg-white'} transition-colors duration-500`}>
-                <div className="mx-auto max-w-4xl px-6 py-24">
-                    {sectionTitle('My Experiences')}
+            {/* Experience & Education Unified Timeline */}
+            <section id="experience" className={`border-t ${borderLight} ${isDark ? 'bg-[#0a0a0a]' : 'bg-white'} transition-colors duration-500 py-24`}>
+                <div className="mx-auto max-w-4xl px-6">
+                    {sectionTitle('Experience & Education')}
 
                     <div className="relative ml-4 space-y-12">
                         <div className={`absolute left-0 top-3 h-[calc(100%-0.75rem)] w-[1px] ${isDark ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
 
-                        {experiences.map((exp) => (
-                            <div key={exp.id} className="relative pl-10">
-                                {/* Bullet point */}
-                                <span className={`absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 ${isDark ? 'border-neutral-600 bg-[#0a0a0a]' : 'border-neutral-400 bg-white'}`} />
+                        {experiences.map((exp) => {
+                            // Cek apakah data ini berupa sekolah atau perusahaan berdasarkan kata kunci
+                            const isEducation = exp.company_or_organization.toLowerCase().includes('school') || 
+                                                exp.company_or_organization.toLowerCase().includes('smk') ||
+                                                exp.company_or_organization.toLowerCase().includes('universitas') ||
+                                                exp.company_or_organization.toLowerCase().includes('unv');
 
-                                {/* Company Icon */}
-                                <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg ${isDark ? 'bg-neutral-800' : 'bg-neutral-100'} border ${border}`}>
-                                    <Briefcase className={`h-5 w-5 ${t('text-neutral-900', 'text-neutral-300')}`} />
+                            return (
+                                <div key={exp.id} className="relative pl-10">
+                                    <span className={`absolute left-0 top-1.5 h-3 w-3 rounded-full border-2 ${isDark ? 'border-neutral-600 bg-[#0a0a0a]' : 'border-neutral-400 bg-white'}`} />
+
+                                    <div className={`mb-3 inline-flex h-10 w-10 items-center justify-center rounded-lg ${isDark ? 'bg-neutral-800' : 'bg-neutral-100'} border ${border}`}>
+                                        {isEducation ? (
+                                            <GraduationCap className={`h-5 w-5 ${t('text-neutral-900', 'text-neutral-300')}`} />
+                                        ) : (
+                                            <Briefcase className={`h-5 w-5 ${t('text-neutral-900', 'text-neutral-300')}`} />
+                                        )}
+                                    </div>
+
+                                    <h3 className={`text-lg font-semibold ${t('text-neutral-900', 'text-white')}`}>
+                                        {exp.company_or_organization}
+                                    </h3>
+                                    <p className={`text-base font-medium ${t('text-neutral-700', 'text-neutral-300')}`}>
+                                        {exp.position}
+                                    </p>
+                                    <p className={`mt-1 text-sm ${t('text-neutral-500', 'text-neutral-500')}`}>
+                                        {new Date(exp.start_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+                                        {exp.end_date
+                                            ? ` - ${new Date(exp.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`
+                                            : ' - Present'}
+                                    </p>
+
+                                    {exp.description_id && (
+                                        <div
+                                            className={`prose prose-sm mt-4 max-w-none ${isDark ? 'prose-invert text-neutral-400' : 'text-neutral-600'}`}
+                                            dangerouslySetInnerHTML={{ __html: exp.description_id }}
+                                        />
+                                    )}
                                 </div>
-
-                                <h3 className={`text-lg font-semibold ${t('text-neutral-900', 'text-white')}`}>
-                                    {exp.company_or_organization}
-                                </h3>
-                                <p className={`text-base font-medium ${t('text-neutral-700', 'text-neutral-300')}`}>
-                                    {exp.position}
-                                </p>
-                                <p className={`mt-1 text-sm ${t('text-neutral-500', 'text-neutral-500')}`}>
-                                    {new Date(exp.start_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
-                                    {exp.end_date
-                                        ? ` - ${new Date(exp.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`
-                                        : ' - Present'}
-                                </p>
-
-                                {exp.description_id && (
-                                    <div
-                                        className={`prose prose-sm mt-4 max-w-none ${isDark ? 'prose-invert text-neutral-400' : 'text-neutral-600'}`}
-                                        dangerouslySetInnerHTML={{ __html: exp.description_id }}
-                                    />
-                                )}
-
-                                {/* Tech Tags */}
-                                <div className={`mt-4 flex flex-wrap gap-2`}>
-                                    {['Laravel', 'React', 'Tailwind CSS', 'AI Integration'].map((tech) => (
-                                        <span
-                                            key={tech}
-                                            className={`rounded-full px-3 py-1 text-xs font-medium ${isDark ? 'border border-neutral-800 bg-neutral-900 text-neutral-400' : 'border border-neutral-200 bg-neutral-50 text-neutral-600'}`}
-                                        >
-                                            {tech}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>
@@ -325,7 +322,6 @@ export default function Home({
                             >
                                 <div className="overflow-hidden rounded-t-2xl border-b border-neutral-100">
                                     <div className="aspect-video w-full overflow-hidden">
-                                        {/* FIX: Cek apakah ada thumbnail, kalau ada tampilkan gambarnya */}
                                         {project.thumbnail ? (
                                             <img 
                                                 src={`/storage/${project.thumbnail}`} 

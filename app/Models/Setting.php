@@ -9,6 +9,5 @@ class Setting extends Model
 {
     use HasFactory;
 
-    // WAJIB ADA INI BIAR BISA DI-SAVE DARI CONTROLLER
     protected $fillable = ['key', 'value']; 
 }
